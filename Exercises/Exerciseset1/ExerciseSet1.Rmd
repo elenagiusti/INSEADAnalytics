@@ -6,7 +6,7 @@ output: html_document
 ---
 
 
-<br>
+<br>"runtime: shiny"
 
 The purpose of this exercise is to become familiar with:
 
@@ -87,19 +87,25 @@ pnl_plot(SPY)
 3. *(Extra points)* What if we want to also see the returns of another company, say Yahoo!, in the same period? Can you get that data and report the statistics for Yahoo!'s stock, too? 
 
 **Your Answers here:**
-1.The ticker AAPL is download after the ticker SPY in line 8 of data Set 1 . ER code : mytickers = c("SPY", "AAPL")"\nDownloading ticker  AAPL  ..."
+1.The ticker AAPL is downloaded after the ticker SPY in line 8 of data Set 1 . IN R code : mytickers = c("SPY", "AAPL")"\nDownloading ticker  AAPL  ..."
 
 2. 
-> round(100*sum(StockReturns[,2),1)
+<br> round(100*sum(StockReturns[,2],1)
 [1] 596.5
-> round(100*mean(StockReturns[,2]),3)
+<br> round(100*mean(StockReturns[,2]),3)
 [1] 0.148
-> round(100*sd(StockReturns[,2]),3)
+<br>round(100*sd(StockReturns[,2]),3)
 [1] 2.389
 
 
-3.
+3.To get the data for Yahoo this part of the code should be modified in line 8 of dataSet1 mytickers = c("SPY", "AAPL","YHOO") 
 
+<br>round(100*sum(StockReturns[,3]),3)
+[1] 290.567
+<br>round(100*mean(StockReturns[,3]),3)
+[1] 0.072
+<br>round(100*sd(StockReturns[,3]),3)
+[1] 3.019
 
 ### Part II: Simple Matrix Manipulations
 
@@ -134,13 +140,20 @@ We can also transpose the matrix of returns to create a new "horizontal" matrix.
 2. Based on the help for the R function *apply* (`help(apply)`), can you create again the portfolio of S&P and Apple and plot the returns in a new figure below?
 
 **Your Answers here:**
-<br>
-<br>
-<br>
-<br>
+1.
+<br> ncol(transposedData)
+[1] 4034
+<br> nrow(transposedData)
+[1] 3
 
-<hr>
-<hr>
+The row of transpose data should be two if you use the original data with only SPY and AAPL
+
+2.
+<br> transposedData = t(StockReturns[,c("SPY","AAPL")])
+<br>porfolio = apply(transposedData,2,mean)
+<br> names(portfolio) <- rownames(StockReturns[,c("SPY","AAPL")])
+<br> pnl_plot(porfolio)
+
 
 ### Part III: Reproducibility and Customization
 
@@ -152,7 +165,15 @@ This is an important step and will get you to think about the overall process on
 2. *(Extra Exercise)*  Can you get the returns of a few companies and plot the returns of an equal weighted portfolio with those companies during some period you select? 
 
 **Your Answers here:**
-1. You have to change the startDate to  "2000-12-29"in dataSet1.R and you got data starting from the 2nd of january since the first stock market is closed.
+1. You have to change the startDate to  "2000-12-29"in dataSet1.R and you got data starting from the 2nd of january since the first of january stock market is closed.
+2.
+Yes I have created a new porfolio adding GOOG and TSL on the data set in the part of the code line 8
+<br> mytickers = c("SPY", "AAPL","YHOO","GOOG","TSL")
+
+<br> transposedNewPortfolio = t(StockReturns[c(3000:4000),])
+<br> NewPortfolio <- apply(transposedNewPortfolio,2,mean)
+<br> names(NewPortfolio)<-rownames(StockReturns[c(3000:4000),])
+<br> pnl_plot(NewPortfolio)
 
 ###  Part IV: Read/Write .CSV files
 
@@ -180,8 +201,8 @@ myData + StockReturns[1:40,]
 ```
 
 **Your Answers here:**
-1. 20
-2. The two databases cannot be merged since they are in different extensions
+1.It gives you as a result 20 and tell you how many times the data in the matrix twentydays(myData) match the Stock returns.
+2. The two databases cannot be merged since they are in different extensions/format.Therefore we have an error message.
 
 
 ### Extra Question
