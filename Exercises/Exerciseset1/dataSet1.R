@@ -17,6 +17,8 @@ if (getdata.fromscratch){
   StockVolume=StockPrices
   StockPrices[,1] <- tmp[,6]
   
+  SPY = StockReturns[,"SPY"]
+  
   for (ticker_index in 1:length(mytickers)){
     ticker_to_get = mytickers[ticker_index]
     print(paste("\nDownloading ticker ", ticker_to_get, " ..."))
