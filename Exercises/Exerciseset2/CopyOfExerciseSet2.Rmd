@@ -49,7 +49,8 @@ Before starting, make sure you have pulled the [exercise set 2 souce code files]
 ```{r echo=TRUE, eval=FALSE, tidy=TRUE}
 getwd()
 
-setwd("/Users/elena/INSEADAnalytics/INSEAD Analytics/Exercises/Exerciseset2")
+
+setwd("/Users/elena/INSEADAnalytics/Exercises/Exerciseset2")
 list.files()
 ```
 
