@@ -191,6 +191,7 @@ max(futures_data[,"10yr T-Notes"])
 <br> 9.Precious metal
 <br> 10. Asian markets index
 
+
 ```{r}
 crisis_data = futures_data [as.Date(rownames(futures_data))>"2007-10-01" & as.Date(rownames(futures_data)) < "2009-03-01", ]
 precrisis_data = futures_data [as.Date(rownames(futures_data)) >"2002-10-01" & as.Date(rownames(futures_data)) < "2007-10-01 " , ]
