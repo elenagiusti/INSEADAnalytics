@@ -86,7 +86,7 @@ There are many ways to get futures data. For example, one can use  the [Quandl p
 
 Let's load the data and see what we have. 
 
-```{r echo=TRUE}
+```{r echo= FALSE, eval=FALSE}
 suppressPackageStartupMessages(source("helpersSet2.R"))
 load("data/FuturesTrendFollowingData.Rdata")
 ```
@@ -101,7 +101,7 @@ print(colnames(futures_data))
 
 Let's see how these are correlated. The correlation matrix is as follows:
 
-```{r}
+```{r echo= TRUE, eval=TRUE}
 show_data = round(cor(futures_data),2)
 iprint.df(show_data, scale=TRUE)
 ```
@@ -109,9 +109,10 @@ iprint.df(show_data, scale=TRUE)
 
 We see quite high correlations among some of the futures. Does it make sense? Why? Do you see some negative correlations? Do those make sense? 
 
-```{r}
+```{r echo= FALSE, eval=TRUE}
 library(reshape2)
 subset(melt(show_data), value > 0.8 & value < 1)
+iprint.df(subset(melt(show_data), value > 0.8 & value < 1), scale=TRUE)
 ```
 
 <br> It totally makes sense that most of the title are positively correlated and follow the overall market trend while there are no any title that are negatively correlated and perform in different way compared to the market.
@@ -127,18 +128,18 @@ colnames(Variance_Explained_Table)<-c("Eigenvalue",
   "Pct of explained variance", "Cumulative pct of explained variance")
 ```
 
-```{r}
+```{r echo=TRUE, eval=TRUE}
 show_data = round(Variance_Explained_Table, 2)
 iprint.df(show_data)
 ```
 
 Here is the scree plot (see Sessions 3-4 readings):
 
-```{r echo=TRUE}
+```{r echo=TRUE, eval=TRUE}
 eigenvalues  <- Variance_Explained_Table[, "Eigenvalue"]
 ```
 
-```{r}
+```{r echo=TRUE, eval=TRUE}
 df           <- cbind(as.data.frame(eigenvalues), c(1:length(eigenvalues)), rep(1, length(eigenvalues)))
 colnames(df) <- c("eigenvalues", "components", "abline")
 iplot.df(melt(df, id="components"))
@@ -160,7 +161,7 @@ Rotated_Factors[abs(Rotated_Factors) < 0.3]<-NA
 ```
 
 
-```{r}
+```{r echo=TRUE, eval=TRUE}
 show_data <- Rotated_Factors 
 iprint.df(show_data, scale=TRUE)
 ```
@@ -174,15 +175,20 @@ iprint.df(show_data, scale=TRUE)
 5. Based on your analysis in question 3, please discuss any differences you observe about the futures returns during  bull and bear markets.  What implications may these results have? What do the results imply about how assets are correlated during bear years compared to bull years? 
 
 **Answers**
-<br> 1. 5 components would explain appproximately 52% of overall variance.
 
-<br> 2.5 yr T-Notes US 
-10yr T-Notes
-```{r}
+<br> Question 1 
+Five components would explain appproximately 52% of overall variance.
+
+<br> Question 2
+<br>5 yr T-Notes US 
+<br>10yr T-Notes
+
+```{r echo=TRUE, eval=TRUE}
 max(futures_data[,"5 yr T-Notes US"])
 max(futures_data[,"10yr T-Notes"])
 ```
 
+<br>Question 3
 <br> 1. Treasury Bond
 <br> 2. Currency Gold and Silver
 <br> 3 and 4 Market index
@@ -194,13 +200,14 @@ max(futures_data[,"10yr T-Notes"])
 <br> 10. Asian markets index
 
 
-```{r}
+<br>Question 4
+```{r echo=TRUE, eval=TRUE}
 crisis_data = futures_data [as.Date(rownames(futures_data))>"2007-10-01" & as.Date(rownames(futures_data)) < "2009-03-01", ]
 precrisis_data = futures_data [as.Date(rownames(futures_data)) >"2002-10-01" & as.Date(rownames(futures_data)) < "2007-10-01 " , ]
 
 ```
-
-```{r}
+<br>Question 5
+```{r echo=TRUE, eval=TRUE}
 Variance_Explained_Table_results_crisis<-PCA(crisis_data, graph=FALSE)
 Variance_Explained_Table_crisis<-Variance_Explained_Table_results_crisis$eig
 colnames(Variance_Explained_Table_crisis)<-c("Eigenvalue", 
@@ -215,7 +222,7 @@ colnames(df) <- c("eigenvalues", "components", "abline")
 iplot.df(melt(df, id="components"))
 ```
 
-```{r}
+```{r echo=TRUE, eval=TRUE}
 Variance_Explained_Table_results_precrisis<-PCA(precrisis_data, graph=FALSE)
 Variance_Explained_Table_precrisis<-Variance_Explained_Table_results_precrisis$eig
 colnames(Variance_Explained_Table_precrisis)<-c("Eigenvalue", "Pct of explained variance", "Cumulative pct of explained variance")
@@ -230,7 +237,7 @@ colnames(df) <- c("eigenvalues", "components", "abline")
 iplot.df(melt(df, id="components"))
 
 ```
-<br> During year of bear market we notice that 50% of the variance is explained by only a small number of principal components (3) . This means that in the market during downstate asset are more strongly correalted and data can be explained by a lower number of unique variables.
+<br> During year of bear market we notice that 50% of the variance is explained by only a small number of principal components (3) . This means that in the market during downstate assets are more strongly correalted and data can be explained by a lower number of unique variables.
 
 # A Simple Futures Trend Following Strategy
 
@@ -271,13 +278,13 @@ names(trading_strategy) <- rownames(futures_data)
 Let's see how this strategy does:
 
 
-```{r}
+```{r echo=TRUE, eval=TRUE}
 iplot.pnl(trading_strategy)
 ```
 
 Here is how this strategy has performed during this period:
 
-```{r}
+```{r echo=TRUE, eval=TRUE}
 show_data = round(pnl_matrix(trading_strategy),2)
 iprint.df(show_data)
 ```
@@ -293,10 +300,10 @@ How does this compare with **existing CTA products** such as [this one from Soci
 
 **Answers**
 
-<br>1. The code takes the moving average od all retrun each 20 days. Then it assign a relative weight of all asset up to 1 looking to previous aggregate result. Finally it project the result in the future.
+<br>1. The code takes the moving average od all retruns in an interval of 20 days. Then it assigns a relative weight to all assets up to 1 looking to previous aggregate result. Finally it projects the result in the future.
 
 <br>2.
-```{r}
+```{r echo=TRUE, eval=TRUE}
 
 MAfreq2<-seq(1,100,by=50)
 for (iter in 1:length(MAfreq2))
@@ -316,7 +323,7 @@ trading_strategy2 = apply(strategy_by_future2,1,sum)
 names(trading_strategy2) <- rownames(futures_data)
 ```
 <br> Here is shown the plot
-```{r}
+```{r echo=TRUE, eval=TRUE}
 iplot.pnl(trading_strategy2)
 ```
 
